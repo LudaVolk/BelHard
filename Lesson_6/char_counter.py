@@ -13,7 +13,17 @@
 
 Нельзя пользоваться collections.Counter!
 """
-#пробую первый раз
+# пробую 1й раз
+
+def count_char(s: str):
+    n = set(s)
+    return {x:s.count(x) for x in n}
+
+STR_VAL = 'python is the fastest-growing major programming language'
+p = count_char(STR_VAL)
+print(p)
+
+#пробую 2й раз
 def count_chars(string, char):
     index = 0
     count = 0
@@ -32,7 +42,7 @@ print("'p': ", (count_chars(STR_VAL, 'p')))
 print("'y': ", (count_chars(STR_VAL, 'y')))
 
 
-# пробую 2й раз
+# пробую 3й раз
 def count_chars(STR_VAL):
     letters = set(STR_VAL)
     a = {}
@@ -41,3 +51,4 @@ def count_chars(STR_VAL):
     return a
 STR_VAL = 'python is the fastest-growing major programming language'
 print(count_chars(STR_VAL))
+

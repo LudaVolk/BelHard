@@ -18,29 +18,47 @@ https://pyneng.readthedocs.io/ru/latest/book/10_useful_functions/all_any.html
     "kwargs_max_len": 7
 }
 """
+
 def dict_from_args(*args, **kwargs):
-    i = 1
-    while True:
-        if all([type(i) is int for i in args]) == False:
-            print("Все позиционные аргументы должны быть целыми")
-            break
-        total = 0
-        for arg in args:
-            total += arg
-        print('{')
-        print('     "args_sum": ' + str(total) + ',')
-        break
-    num = 0
-    if all([type(i) is int for i in kwargs]) == True:
-        print("Все аргументы - ключевые слова должны быть строками")
-        return
-    for key, value in kwargs.items():
-        if len(value) > num:
-            num = len(value)
-        #t = "{1}".format(key, value, end =" ")
 
-    print('     "kwargs_max_len": ' + str(num))
-    print('}')
-args = [40000, 2, 8]
+    res = {}
+    if all([type(i) is int for i in args]):
+	    res['args_sum'] = sum(args)
+    else:
+        raise TypeError("Все позиционные аргументы должны быть целыми")
 
-dict_from_args(*args, kw_1='Иван', kw_2='Иванова')
+    if all([type(i) is str for i in kwargs.values()]):
+	    res['kwargs_max_len'] = max([len(i) for i in kwargs.values()])
+    else:
+	    raise TypeError("Все аргументы – ключевые слова должны быть строками")
+
+    return res
+
+print(dict_from_args(1, 2, 3, 4, q = '123', w = '124568gjhg97', c = '12', r = 'qwerty'))
+
+# def dict_from_args(*args, **kwargs):
+#     i = 1
+#     while True:
+#         if all([type(i) is int for i in args]) == False:
+#             print("Все позиционные аргументы должны быть целыми")
+#             break
+#         total = 0
+#         for arg in args:
+#             total += arg
+#         print('{')
+#         print('     "args_sum": ' + str(total) + ',')
+#         break
+#     num = 0
+#     if all([type(i) is int for i in kwargs]) == True:
+#         print("Все аргументы - ключевые слова должны быть строками")
+#         return
+#     for key, value in kwargs.items():
+#         if len(value) > num:
+#             num = len(value)
+#         #t = "{1}".format(key, value, end =" ")
+#
+#     print('     "kwargs_max_len": ' + str(num))
+#     print('}')
+# args = [40000, 2, 8]
+#
+# dict_from_args(*args, kw_1='Иван', kw_2='Иванова')
