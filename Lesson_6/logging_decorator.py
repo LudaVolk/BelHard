@@ -7,25 +7,19 @@
 "Выполняем {func.__name__} с args: {args} и kwargs: {kwargs}".
 После выполнения функции напечатать строку "Выполнено {func.__name__}"
 """
-def hello(name):
-
-    print(f"Привет, {name}")
-name = "Люда"
-
-hello(name)
-
-
+#работа над ошибками
 def decorator(func):
     def wrapper(*args, **kwargs):
-        print('Выполняем {func.__name__} с args: {args} и kwargs: {kwargs}')
-        result = func(*args, **kwargs)
-        print('Выполнено {func.__name__}')
-        return result
+        print(f"Выполняем функцию {func.__name__} c аргс {args} и c кваргс {kwargs}")
+        func(*args, **kwargs)
+        print(f"Выполнено {func.__name__}")
     return wrapper
 
 @decorator
-def hello(name):
-    print(f"Привет, {name}")
-name = "Люда"
+def hello(name, surname, v1=True, v2=2):
+    print(f"Привет {surname} {name} {'!' if v1 else ''}")
 
-hello(name)
+name = "Люда"
+surname = "Волкова"
+
+hello(name, surname, v1=False, v2=3)

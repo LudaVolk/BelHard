@@ -20,20 +20,35 @@ StopIteration
 """
 
 def fibonacci(n):
-    if (n <= 1):
-        return n+1
-    else:
-        return (fibonacci(n-1) + fibonacci(n-2))
-while True:
+    a, b = 0, 1
+    for i in range(n):
+        yield a
+        a, b = b, a + b
 
-    n = input("Введите число членов последовательности:")
-    if not n.isnumeric():
-        print('Введите  число')
-    elif int(n) <= 0:
-        print('Введите число больше 0')
-    else:
-        break
-print("Последовательность Фибоначчи:")
+n = 5
+fib = fibonacci(n)
 
-for i in range(int(n)):
-    print(fibonacci(i))
+print(next(fib))
+print(next(fib))
+print(next(fib))
+print(next(fib))
+print(next(fib))
+
+# def fibonacci(n):
+#     if (n <= 1):
+#         return n+1
+#     else:
+#         return (fibonacci(n-1) + fibonacci(n-2))
+# while True:
+#
+#     n = input("Введите число членов последовательности:")
+#     if not n.isnumeric():
+#         print('Введите  число')
+#     elif int(n) <= 0:
+#         print('Введите число больше 0')
+#     else:
+#         break
+# print("Последовательность Фибоначчи:")
+#
+# for i in range(int(n)):
+#     print(fibonacci(i))
