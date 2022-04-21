@@ -10,13 +10,18 @@ r"""
 """
 
 import re
-
+from collections import Counter
+#1й
 frequency = {}
 
-document_text = "С помощью модуля Python это сделать очень просто. Python cначала нужно импортировать класс datetime из модуля datetime, после чего создать объект datetime. Модуль предоставляет метод now(), который возвращает текущие дату и время с учетом локальных настроек now"
+document_text = """ С помощью модуля Python это сделать очень просто. 
+Python cначала нужно импортировать класс datetime из модуля datetime, 
+после чего создать объект datetime Python. Модуль предоставляет метод now(), 
+который возвращает текущие дату и время с учетом локальных настроек now Python  
+"""
 
 text_string = document_text.lower()
-match_pattern = re.findall(r'\b[a-z]{3,15}\b', text_string)
+match_pattern = re.findall(r"[а-я']*[а-яa-z]+[a-z']*", text_string)
 
 for word in match_pattern:
     count = frequency.get(word, 0)
@@ -29,7 +34,25 @@ for words in frequency_list:
     count2 = count2 + 1
     if count2 > 3:
         break
-    print(words, frequency[words])
+print(words, frequency[words])
 
 sorted_by_second = sorted(frequency_list, key=lambda words: frequency[words], reverse=True)
 print(sorted_by_second)
+
+#2й
+def top_3_words(text):
+    words = re.findall(r"[а-я']*[а-яa-z]+[a-z']*", text.lower())
+    top_3 = Counter(words).most_common(3)
+    return [typ[0] for typ in top_3]
+
+text = """ С помощью модуля Python это сделать очень просто. 
+Python cначала нужно импортировать класс datetime из модуля datetime, 
+после чего создать объект datetime Python. Модуль предоставляет метод now(), 
+который возвращает текущие дату и время с учетом локальных настроек now Python  
+"""
+print(top_3_words(text))
+
+#3й
+top_3_words3 = lambda t: [w for w, c in Counter (re.findall(r"[а-я']*[а-яa-z]+[a-z']*", text.lower())).most_common(3)]
+
+print(top_3_words3(text))
