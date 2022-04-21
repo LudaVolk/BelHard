@@ -31,121 +31,117 @@
 При создании пользователя ему предоставляется пробная подписка сроком на 30 дней.
 При изменении даты подписки  вид подписки меняется на платный.
 """
+import random
+from datetime import date, datetime, timedelta
+current_data = date.today()
+q = date.today() + timedelta(days=30)
 import re
 import strgen
-from datetime import date
+import random
 
+class User:
+    name: str
+    login: str
+    password: str
+    is_blocked: bool
+    subscription_date: int
+    subscription_mode: int
 
-class User():
+    def __init__(self, name, login, password, is_blocked=False, subscription_date=q, subscription_mode="free"):
+        # self._name = name
+        # self._login = login
+        while self.check_name(name) is False:
+            name = input("Введите имя: ")
+            self.check_name(name)
+            self.name = name
+            break
+        else:
+            self.name = name
 
-    def __init__(self, name, login, password, is_blocked):
-        self._name = name
-        self._login = login
-        self._password = password
-        self.is_blocked = False
-        self.subscription_date = date.today()
-        self.subscription_mode = "free"
+        while self.check_login(login, name) is False:
+            login = input("Введите логин: ")
+            self.check_login(login, name)
+            self.login = login
+            break
+        else:
+            self.login = login
 
-
-    @property
-    def name(self):
-         return self._name
-
-    @name.setter
-    def name(self, value):
-        self._name = value
-
-    @property
-    def login(self):
-        return self._login
-
-    @login.setter
-    def login(self, value):
-        self._login = value
-
-    @property
-    def password(self):
-        return self._password
-
-    @password.setter
-    def password(self, value):
-        self._password = value
-
-    def bloc(self, is_blocked):
+        self.password = password
         self.is_blocked = is_blocked
-        if is_blocked != True and is_blocked != False:
-            self.is_blocked = False
-        else:
-            self.is_blocked = is_blocked
-
-        if self.is_blocked:
-           print("Пользователь заблокирован")
-        else:
-           print("Пользователь не заблокирован")
+        self.subscription_date = subscription_date
+        self.subscription_mode = subscription_mode
 
     def get_info(self):
-        print(f"name = {self._name}, login = {self._login}, password = {self._password}")
+        print(f"name: {self.name}\nlogin: {self.login}\npassword: {self.password}\nsub_date: {self.subscription_date}\nsub_mode: {self.subscription_mode}")
 
-    def check_subscr(self):
-        date1 = date.today()
-        date2 = date(2022, 1, 11)
-        namber_date = (date1 - date2).days
-        if namber_date >= 30:
-            return "paid"
+    def block(self):
+        self.is_blocked = True
+
+    def unblock(self):
+        self.is_blocked = False
+
+    def check_subscr(self, date=None):
+        current_data = date.today()
+        if self.subscription_date <= date:
+            print(f'{self.name} - перейдите на другой вид подписки')
         else:
-            return "free"
+            data = self.subscription_date - current_data
+            print(f'{self.name} осталось {data.days} дней подписки, вид подписки {self.subscription_mode}')
 
-def change_pass(new_password):
-    if len(new_password) >= 0:
-        password = strgen.StringGenerator("[A-Z][a-z][0-9]{4}").render()
-        print("новый пароль:" + password)
-    else:
-        print("новый пароль:" + new_password)
-        # return new_password
-    return password
+    def check_name(self, name):
+        if len(re.findall("[а-яА-ЯёЁ]", name)) == len(name):
+            return True
+        else:
+            print(f'{name} - Введите новое имя')
+            return False
 
-while True:
-    name = input("Введите имя: ")
-    if re.match(r"[а-яА-ЯёЁ]", name):
-        break
-    else:
-        print('Имя не корректно')
-        continue
-while True:
-    login = input("Введите логин: ")
-    if re.match(r"([A-Za-z0-9+_]{6})", login):
-        break
-    else:
-        print('Логин не валиден')
-        continue
+    def check_login(self, login, name):
+        if re.match(r"([A-Za-z0-9+_]{6,})", login):
+            return True
+        else:
+            print(f'{name} - Введите новый логин')
+            return False
 
-while True:
-    password = input("Введите пароль: ")
-    if len(password) == 0:
-        password = change_pass(password)
-        break
-    elif re.match(r"([A-Z][a-z][0-9]{1,6})", password):
-        break
-    else:
-        print('Пароль не валиден')
-        continue
+    def check_password(self):
+        val = self.password
+        if re.match(r"([A-Z][a-z][0-9]{1,6})", val):
+            print(f'{self.name} - пароль соответствует')
+        else:
+            print(f'{self.name} - пароль не соответствует')
+            return False
 
-# while True:
-#     date_i = str(input('Ведите дату в формате Y,m,d: '))
-#     try:
-#         date2 = date.strptime(date_i, "%Y,%m,%d")
-#         #date2 = check_subscr(date2)
-#         break
-#     except ValueError:
-#         print("Введите дату правильно")
-#         continue
+    def change_pass(self, val):
+        if val == "":
+            new_password = ""
+            for x in range(15):
+                new_password = strgen.StringGenerator("[A-Z][a-z][0-9]{6}").render()
+            val = new_password
+        else:
+             if self.check_password(val):
+                print(new_password)
 
-user = User(name, login, password, True)
-user.name = name
-user.login = login
-user.password = password
-#print("имя:" + user.name, "логин:" + user.login, "пароль:" + user.password)
-user.get_info()
-user.bloc(False)
-print("Subscription_mode: " + user.check_subscr())
+        if re.search(r"([A-Z][a-z][0-9]{1,6})", val):
+            print(f'{self.name} - new_password', val)
+            self.password = val
+        else:
+            print(f'{self.name} - поменяйте пароль')
 
+user1 = User("Люда", "Qq_123", "Ll2345")
+user2 = User("Лена", "Ww_234", "Aa2345")
+user3 = User("ира", "Gg_123", "")
+user1.get_info()
+user1.block()
+user1.unblock()
+# user1.change_pass('')
+#user1.check_subscr('')
+#user1.change_pass()
+print("-----------")
+user2.get_info()
+user2.block()
+user2.unblock()
+# user2.change_pass('')
+print("-----------")
+user3.get_info()
+user3.block()
+user3.unblock()
+user3.change_pass('')

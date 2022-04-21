@@ -14,10 +14,10 @@
 		* положить трубку с возвратом  времени разговора которое тоже в записывается историю
 
 """
-
 import time
+import Phone
 
-class Phone:
+class MobilePhone():
     brand: str
     model: str
     issue_year: str
@@ -28,6 +28,7 @@ class Phone:
     #call.start: time
 
     def __init__(self, brand, model, issue_year):
+        # MobilePhone(self, brand, model, issue_year, call_history, sms_history)
         self.brand = brand
         self.model = model
         self.issue_year = issue_year
@@ -80,7 +81,7 @@ class Phone:
     def get_info (self):
         return f"Бренд = {self.brand}, Модель = {self.model}, Год выпуска = {self.issue_year}"
 
-p = Phone("Xiaomi Redmi", "10", 2022)
+p = MobilePhone("Xiaomi Redmi", "10", 2022)
 p.receive_call("Luda", "37529995999")
 p.receive_sms("Luda", "Доброе утро")
 time.sleep(1)
